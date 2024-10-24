@@ -1,10 +1,13 @@
 package br.com.ordepsomar.eremessa.controller;
 
 import br.com.ordepsomar.eremessa.controller.dto.CreatePeriodicoDto;
+import br.com.ordepsomar.eremessa.controller.dto.DetalheDTO;
+import br.com.ordepsomar.eremessa.controller.dto.PeriodicoDTO;
 import br.com.ordepsomar.eremessa.controller.dto.UpdatePeriodicoDto;
 import br.com.ordepsomar.eremessa.entity.Periodico;
 import br.com.ordepsomar.eremessa.service.PeriodicoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,8 +25,9 @@ public class PeriodicoController {
     }
 
     @PostMapping
-    public Periodico savePeriodico(@RequestBody CreatePeriodicoDto createPeriodicoDto){
-        return periodicoService.createPeriodico(createPeriodicoDto);
+    public ResponseEntity<DetalheDTO> savePeriodico(@RequestBody DetalheDTO detalheDTO){
+        DetalheDTO savedPeriodico = periodicoService.savePeriodico(detalheDTO);
+        return ResponseEntity.ok(savedPeriodico);
     }
 
     @PutMapping("/{id}")

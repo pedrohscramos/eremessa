@@ -1,8 +1,12 @@
 package br.com.ordepsomar.eremessa.service.impl;
 
 import br.com.ordepsomar.eremessa.controller.dto.CreatePeriodicoDto;
+import br.com.ordepsomar.eremessa.controller.dto.DetalheDTO;
+import br.com.ordepsomar.eremessa.controller.dto.PeriodicoDTO;
 import br.com.ordepsomar.eremessa.controller.dto.UpdatePeriodicoDto;
+import br.com.ordepsomar.eremessa.entity.Detalhe;
 import br.com.ordepsomar.eremessa.entity.Periodico;
+import br.com.ordepsomar.eremessa.repository.DetalheRepository;
 import br.com.ordepsomar.eremessa.repository.PeriodicoRepository;
 import br.com.ordepsomar.eremessa.service.PeriodicoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,29 +21,16 @@ public class PeriodicoServiceImpl implements PeriodicoService {
     @Autowired
     private PeriodicoRepository periodicoRepository;
 
+    @Autowired
+    private DetalheRepository detalheRepository;
+
     @Override
-    public Periodico createPeriodico(CreatePeriodicoDto createPeriodicoDto) {
+    public DetalheDTO savePeriodico(DetalheDTO detalheDTO) {
 
-        var entity = new Periodico();
-             entity.setTp_registro(createPeriodicoDto.tp_registro());
-             entity.setCod_titulo(createPeriodicoDto.cod_titulo());
-             entity.setId_periodico(createPeriodicoDto.id_periodico());
-             entity.setNum_edicao(createPeriodicoDto.num_edicao());
-             entity.setTp_periodico(createPeriodicoDto.tp_periodico());
-             entity.setPeso_un(createPeriodicoDto.peso_un());
-             entity.setUni_medida_un(createPeriodicoDto.uni_medida_un());
-             entity.setLargura(createPeriodicoDto.largura());
-             entity.setAltura(createPeriodicoDto.altura());
-             entity.setComprimento(createPeriodicoDto.comprimento());
-             entity.setUni_medida_dim(createPeriodicoDto.uni_medida_dim());
-             entity.setQtd_amarrado(createPeriodicoDto.qtd_amarrado());
-             entity.setQtd_total(createPeriodicoDto.qtd_total());
-             entity.setQtd_extra(createPeriodicoDto.qtd_extra());
-             entity.setLegenda(createPeriodicoDto.legenda());
+        Detalhe detalhe = convertToEntity(detalheDTO);
+        Detalhe savedPeriodico = detalheRepository.save(detalhe);
+        return convertToDTO(savedPeriodico);
 
-
-
-        return periodicoRepository.save(entity);
     }
 
     @Override
@@ -75,5 +66,67 @@ public class PeriodicoServiceImpl implements PeriodicoService {
             return periodicoRepository.save(periodicoOriginal);
         }
         return null;
+    }
+
+    private Detalhe convertToEntity(DetalheDTO detalheDTO){
+        Detalhe detalhe = new Detalhe();
+        detalhe.setId(detalheDTO.getId());
+        detalhe.setTp_registro(detalheDTO.getTp_registro());
+        detalhe.setUf(detalheDTO.getUf());
+        detalhe.setQtd(detalheDTO.getQtd());
+
+
+        Periodico periodico = new Periodico();
+        if(detalheDTO.getPeriodico() != null) {
+            periodico.setId(detalheDTO.getPeriodico().getId());
+            periodico.setTp_registro(detalheDTO.getPeriodico().getTp_registro());
+            periodico.setCod_titulo(detalheDTO.getPeriodico().getCod_titulo());
+            periodico.setId_periodico(detalheDTO.getPeriodico().getId_periodico());
+            periodico.setNum_edicao(detalheDTO.getPeriodico().getNum_edicao());
+            periodico.setTp_periodico(detalheDTO.getPeriodico().getTp_periodico());
+            periodico.setPeso_un(detalheDTO.getPeriodico().getPeso_un());
+            periodico.setUni_medida_un(detalheDTO.getPeriodico().getUni_medida_un());
+            periodico.setLargura(detalheDTO.getPeriodico().getLargura());
+            periodico.setAltura(detalheDTO.getPeriodico().getAltura());
+            periodico.setComprimento(detalheDTO.getPeriodico().getComprimento());
+            periodico.setUni_medida_dim(detalheDTO.getPeriodico().getUni_medida_dim());
+            periodico.setQtd_amarrado(detalheDTO.getPeriodico().getQtd_amarrado());
+            periodico.setQtd_total(detalheDTO.getPeriodico().getQtd_total());
+            periodico.setQtd_extra(detalheDTO.getPeriodico().getQtd_extra());
+            periodico.setLegenda(detalheDTO.getPeriodico().getLegenda());
+        }
+        detalhe.setPeriodico(periodico);
+        return detalhe;
+    }
+
+    private DetalheDTO convertToDTO(Detalhe detalhe){
+        DetalheDTO detalheDTO = new DetalheDTO();
+        detalheDTO.setId(detalhe.getId());
+        detalheDTO.setTp_registro(detalhe.getTp_registro());
+        detalheDTO.setUf(detalhe.getUf());
+        detalheDTO.setQtd(detalhe.getQtd());
+
+        Periodico periodico = detalhe.getPeriodico();
+        if(periodico != null){
+            PeriodicoDTO periodicoDTO = new PeriodicoDTO();
+            periodicoDTO.setId(periodico.getId());
+            periodicoDTO.setTp_registro(periodico.getTp_registro());
+            periodicoDTO.setCod_titulo(periodico.getCod_titulo());
+            periodicoDTO.setId_periodico(periodico.getId_periodico());
+            periodicoDTO.setNum_edicao(periodico.getNum_edicao());
+            periodicoDTO.setTp_periodico(periodico.getTp_periodico());
+            periodicoDTO.setPeso_un(periodico.getPeso_un());
+            periodicoDTO.setUni_medida_un(periodico.getUni_medida_un());
+            periodicoDTO.setLargura(periodico.getLargura());
+            periodicoDTO.setAltura(periodico.getAltura());
+            periodicoDTO.setComprimento(periodico.getComprimento());
+            periodicoDTO.setUni_medida_dim(periodico.getUni_medida_dim());
+            periodicoDTO.setQtd_amarrado(periodico.getQtd_amarrado());
+            periodicoDTO.setQtd_total(periodico.getQtd_total());
+            periodicoDTO.setQtd_extra(periodico.getQtd_extra());
+            periodicoDTO.setLegenda(periodico.getLegenda());
+            detalheDTO.setPeriodico(periodicoDTO);
+        }
+        return detalheDTO;
     }
 }

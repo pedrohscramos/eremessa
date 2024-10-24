@@ -20,8 +20,10 @@ public class Periodico {
     @Column(name="id")
     private Long id;
 
+    /*
     @OneToOne(mappedBy = "periodico")
     private Detalhe detalhe;
+    */
 
     @Column(nullable = false, length = 1)
     private String tp_registro;

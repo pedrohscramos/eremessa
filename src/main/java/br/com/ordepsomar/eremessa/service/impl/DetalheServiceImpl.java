@@ -34,13 +34,13 @@ public class DetalheServiceImpl implements DetalheService {
 
     private Detalhe convertToEntity(DetalheDTO detalheDTO) {
         Detalhe detalhe = new Detalhe();
-        detalhe.setTp_registro(detalheDTO.tp_registro());
-        detalhe.setUf(detalheDTO.uf());
-        detalhe.setQtd(detalheDTO.qtd());
+        detalhe.setTp_registro(detalheDTO.getTp_registro());
+        detalhe.setUf(detalheDTO.getUf());
+        detalhe.setQtd(detalheDTO.getQtd());
 
         Periodico periodico = new Periodico();
-        if(detalheDTO.periodico() != null){
-           periodico.setId(detalheDTO.periodico().id());
+        if(detalheDTO.getPeriodico() != null){
+           periodico.setId(detalheDTO.getPeriodico().getId());
         }
 
        detalhe.setPeriodico(periodico);
@@ -50,18 +50,22 @@ public class DetalheServiceImpl implements DetalheService {
 
     private DetalheDTO convertToDTO(Detalhe detalhe){
 
-        Periodico periodico = detalhe.getPeriodico();
-
-        PeriodicoDTO periodicoDTO = new PeriodicoDTO()
-
         DetalheDTO detalheDTO = new DetalheDTO();
+        detalheDTO.setId(detalhe.getId());
         detalheDTO.setTp_registro(detalhe.getTp_registro());
         detalheDTO.setUf(detalhe.getUf());
         detalheDTO.setQtd(detalhe.getQtd());
-        detalheDTO.setPeriodico();
 
 
+        Periodico periodico = detalhe.getPeriodico();
+        if(periodico != null) {
 
+            PeriodicoDTO periodicoDTO = new PeriodicoDTO();
+            periodicoDTO.setId(periodico.getId());
+            periodicoDTO.setTp_registro(periodico.getTp_registro());
+            detalheDTO.setPeriodico(periodicoDTO);
+        }
+        return detalheDTO;
     }
 
     @Override
